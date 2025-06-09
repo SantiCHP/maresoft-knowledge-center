@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plan de Proyecto: Plataforma de Conocimiento con IA (v2)</title>
+    <style>
+        :root {
+            --primary-color: #0052cc;
+            --secondary-color: #4c8aff;
+            --background-color: #f4f7f6;
+            --card-background: #ffffff;
+            --text-color: #333333;
+            --header-color: #172b4d;
+            --border-color: #e0e0e0;
+            --gantt-bar-color: #5aac44;
+            --gantt-progress-color: #61bd4f;
+            --milestone-color: #ffc107;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            margin: 0;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            background-color: var(--card-background);
+            padding: 20px 40px;
+            border-bottom: 1px solid var(--border-color);
+            text-align: center;
+        }
+
+        header h1 {
+            color: var(--header-color);
+            margin: 0;
+            font-size: 2.5em;
+        }
+        
+        header p {
+            font-size: 1.2em;
+            color: #5e6c84;
+        }
+
+        nav {
+            position: sticky;
+            top: 0;
+            background-color: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: center;
+            padding: 10px 0;
+        }
+
+        nav a {
+            color: var(--primary-color);
+            text-decoration: none;
+            padding: 10px 20px;
+            font-weight: 600;
+            transition: color 0.3s, background-color 0.3s;
+            border-radius: 8px;
+        }
+
+        nav a:hover {
+            color: var(--card-background);
+            background-color: var(--secondary-color);
+        }
+
+        section {
+            padding: 60px 20px;
+            margin-top: 20px;
+            background-color: var(--card-background);
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            scroll-margin-top: 80px; /* Offset for sticky nav */
+        }
+        
+        h2 {
+            color: var(--header-color);
+            border-bottom: 3px solid var(--primary-color);
+            padding-bottom: 10px;
+            margin-bottom: 30px;
+            font-size: 2em;
+        }
+        
+        h3 {
+            color: var(--header-color);
+            font-size: 1.5em;
+        }
+
+        /* Dossier Styles */
+        #dossier .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+        #dossier .grid-item {
+            background-color: var(--background-color);
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 5px solid var(--secondary-color);
+        }
+        
+        /* Gantt Styles */
+        .gantt-container {
+            width: 100%;
+            overflow-x: auto;
+        }
+        .gantt .bar-wrapper.active .bar {
+            opacity: 1;
+        }
+        .gantt .bar {
+            fill: var(--gantt-bar-color) !important;
+            opacity: 0.7;
+            transition: opacity 0.3s;
+        }
+        .gantt .bar-progress {
+            fill: var(--gantt-progress-color) !important;
+        }
+        .gantt .bar-label {
+            font-size: 14px !important;
+            font-weight: 500;
+            fill: #fff !important;
+        }
+        
+        /* Sprints View Styles */
+        .sprints-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 25px;
+        }
+        .sprint-card {
+            background-color: var(--background-color);
+            border-radius: 8px;
+            padding: 25px;
+            border-top: 5px solid;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .sprint-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 16px rgba(0,0,0,0.1);
+        }
+        .sprint-card h3 { margin-top: 0; }
+        .sprint-card h4 {
+            font-weight: 500;
+            color: #5e6c84;
+            margin-top: -10px;
+            margin-bottom: 20px;
+        }
+        .sprint-card ul {
+            padding-left: 20px;
+            list-style: none;
+        }
+        .sprint-card li {
+             position: relative;
+             padding-left: 25px;
+             margin-bottom: 8px;
+        }
+        .sprint-card li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: var(--primary-color);
+            font-weight: bold;
+        }
+        .sprint-card-0 { border-color: #ff991f; } /* Orange */
+        .sprint-card-1 { border-color: #00c7e5; } /* Cyan */
+        .sprint-card-2 { border-color: #5aac44; } /* Green */
+        .sprint-card-3 { border-color: #e54987; } /* Pink */
+        .sprint-card-4 { border-color: #795548; } /* Brown */
+
+        /* Calendar Styles */
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 30px;
+            text-align: center;
+        }
+        .calendar-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .calendar-table th, .calendar-table td {
+            padding: 8px;
+            border: 1px solid #ddd;
+            width: 14.28%;
+        }
+        .calendar-table th {
+            background-color: #f2f2f2;
+        }
+        td.sprint-start { background-color: #a6f3a6; font-weight: bold; }
+        td.sprint-end { background-color: #f3a6a6; font-weight: bold; }
+        td.milestone { background-color: var(--milestone-color); font-weight: bold; }
+        .legend {
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 4px;
+        }
+    </style>
+    
+    <!-- Frappe Gantt Chart Library -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/frappe-gantt@0.6.1/dist/frappe-gantt.css">
+    <script src="https://cdn.jsdelivr.net/npm/frappe-gantt@0.6.1/dist/frappe-gantt.min.js"></script>
+
+</head>
+<body>
+
+    <header>
+        <h1>Plan de Proyecto v2</h1>
+        <p>Plataforma de Conocimiento con IA para Maresoft</p>
+    </header>
+
+    <nav>
+        <a href="#dossier">Dossier del Proyecto</a>
+        <a href="#gantt">Diagrama de Gantt</a>
+        <a href="#sprints">Vista de Sprints</a>
+        <a href="#calendario">Calendario de Hitos</a>
+    </nav>
+
+    <div class="container">
+        <section id="dossier">
+            <h2>Dossier del Proyecto</h2>
+            <div class="grid">
+                <div class="grid-item">
+                    <h3>Objetivo del MVP</h3>
+                    <p>Desarrollar una plataforma web segura y robusta donde los usuarios de Maresoft puedan resolver sus dudas de forma autónoma. La plataforma integrará una base de conocimiento tradicional con un chatbot inteligente (usando RAG) que aprende de las interacciones para mejorar el contenido de las FAQs.</p>
+                </div>
+                <div class="grid-item">
+                    <h3>Pila Tecnológica</h3>
+                    <ul>
+                        <li><strong>Backend:</strong> Laravel 10 / PHP 8.2</li>
+                        <li><strong>Frontend:</strong> Vue.js 3 (integrado con Vite)</li>
+                        <li><strong>Base de Datos:</strong> PostgreSQL con extensión pgvector</li>
+                        <li><strong>IA & Embeddings:</strong> Google Gemini 1.5 Flash</li>
+                        <li><strong>Gestión:</strong> Jira & Bitbucket</li>
+                    </ul>
+                </div>
+                <div class="grid-item">
+                    <h3>Factores Clave de Éxito</h3>
+                    <ul>
+                        <li>Reducción del 25% en tickets de soporte de primer nivel en 3 meses.</li>
+                        <li>Alto índice de satisfacción de usuario (>80%) con las respuestas del chatbot.</li>
+                        <li>Seguridad de nivel corporativo, sin incidentes de datos.</li>
+                        <li>Capacidad de los administradores para actualizar las FAQs basándose en datos reales de uso.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section id="gantt">
+            <h2>Diagrama de Gantt</h2>
+            <div class="gantt-container">
+                 <svg id="gantt-chart"></svg>
+            </div>
+        </section>
+
+        <section id="sprints">
+            <h2>Vista Visual de Sprints</h2>
+            <div class="sprints-container">
+                <div class="sprint-card sprint-card-0">
+                    <h3>Fase 0: Preparación</h3>
+                    <h4>1 Julio - 7 Julio, 2025</h4>
+                    <p><strong>Objetivo:</strong> Establecer las bases técnicas y de gestión.</p>
+                    <ul>
+                        <li>Configuración de Jira y Bitbucket.</li>
+                        <li>Setup del entorno de desarrollo (Laravel, Vue, PGSQL + pgvector).</li>
+                        <li>Definición del modelo de datos inicial.</li>
+                    </ul>
+                </div>
+                <div class="sprint-card sprint-card-1">
+                    <h3>Sprint 1: Usuarios y Acceso</h3>
+                    <h4>8 Julio - 21 Julio, 2025</h4>
+                    <p><strong>Objetivo:</strong> Sistema de acceso seguro y panel de administración.</p>
+                    <ul>
+                        <li>Flujo de solicitud de alta con aprobación.</li>
+                        <li>Login con Google (Socialite).</li>
+                        <li>Sistema de Roles y Permisos (Admin vs. Usuario).</li>
+                    </ul>
+                </div>
+                <div class="sprint-card sprint-card-2">
+                    <h3>Sprint 2: Conocimiento Estático</h3>
+                    <h4>22 Julio - 4 Agosto, 2025</h4>
+                    <p><strong>Objetivo:</strong> Repositorio de conocimiento "oficial" (Docs y FAQs).</p>
+                    <ul>
+                        <li>CRUD para Artículos y Categorías.</li>
+                        <li>CRUD para FAQs.</li>
+                        <li>Vistas públicas para consulta y búsqueda simple.</li>
+                    </ul>
+                </div>
+                <div class="sprint-card sprint-card-3">
+                    <h3>Sprint 3: El Cerebro (IA)</h3>
+                    <h4>5 Agosto - 18 Agosto, 2025</h4>
+                    <p><strong>Objetivo:</strong> Implementación del chatbot y el sistema RAG.</p>
+                    <ul>
+                        <li>Ingesta de documentos y generación de embeddings.</li>
+                        <li>Interfaz de chat en Vue.js.</li>
+                        <li>Endpoint API para el flujo RAG.</li>
+                        <li>Registro de conversaciones en BBDD.</li>
+                    </ul>
+                </div>
+                <div class="sprint-card sprint-card-4">
+                    <h3>Sprint 4: Cierre del Círculo</h3>
+                    <h4>19 Agosto - 1 Septiembre, 2025</h4>
+                    <p><strong>Objetivo:</strong> Conectar la IA con la gestión y preparar el lanzamiento.</p>
+                    <ul>
+                        <li>Panel de auditoría de chats.</li>
+                        <li>Función "Promocionar a FAQ".</li>
+                        <li>Refinamiento de UI/UX y revisión de seguridad.</li>
+                        <li>Despliegue para piloto interno.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section id="calendario">
+            <h2>Calendario de Hitos (2025)</h2>
+            <div class="legend">
+                <div class="legend-item"><div class="legend-color" style="background: #a6f3a6;"></div> Inicio de Sprint</div>
+                <div class="legend-item"><div class="legend-color" style="background: #f3a6a6;"></div> Fin de Sprint</div>
+                <div class="legend-item"><div class="legend-color" style="background: var(--milestone-color);"></div> Hito Clave / Entregable</div>
+            </div>
+            <div class="calendar-grid">
+                <div>
+                    <h3>Julio 2025</h3>
+                    <table class="calendar-table">
+                        <thead><tr><th>Lu</th><th>Ma</th><th>Mi</th><th>Ju</th><th>Vi</th><th>Sá</th><th>Do</th></tr></thead>
+                        <tbody>
+                            <tr><td></td><td class="sprint-start" title="Inicio Fase 0">1</td><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td></tr>
+                            <tr><td class="sprint-end" title="Fin Fase 0">7</td><td class="sprint-start" title="Inicio Sprint 1">8</td><td>9</td><td>10</td><td>11</td><td>12</td><td>13</td></tr>
+                            <tr><td>14</td><td>15</td><td>16</td><td>17</td><td>18</td><td>19</td><td>20</td></tr>
+                            <tr><td class="sprint-end" title="Fin Sprint 1">21</td><td class="sprint-start" title="Inicio Sprint 2">22</td><td>23</td><td>24</td><td>25</td><td>26</td><td>27</td></tr>
+                            <tr><td>28</td><td>29</td><td>30</td><td>31</td><td></td><td></td><td></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div>
+                    <h3>Agosto 2025</h3>
+                    <table class="calendar-table">
+                        <thead><tr><th>Lu</th><th>Ma</th><th>Mi</th><th>Ju</th><th>Vi</th><th>Sá</th><th>Do</th></tr></thead>
+                        <tbody>
+                            <tr><td></td><td></td><td></td><td></td><td>1</td><td>2</td><td>3</td></tr>
+                            <tr><td class="sprint-end milestone" title="Fin Sprint 2: Base de Conocimiento Lista">4</td><td class="sprint-start" title="Inicio Sprint 3">5</td><td>6</td><td>7</td><td>8</td><td>9</td><td>10</td></tr>
+                            <tr><td>11</td><td>12</td><td>13</td><td>14</td><td>15</td><td>16</td><td>17</td></tr>
+                            <tr><td class="sprint-end" title="Fin Sprint 3">18</td><td class="sprint-start" title="Inicio Sprint 4">19</td><td>20</td><td>21</td><td>22</td><td>23</td><td>24</td></tr>
+                            <tr><td>25</td><td>26</td><td>27</td><td>28</td><td>29</td><td>30</td><td>31</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div>
+                    <h3>Septiembre 2025</h3>
+                    <table class="calendar-table">
+                        <thead><tr><th>Lu</th><th>Ma</th><th>Mi</th><th>Ju</th><th>Vi</th><th>Sá</th><th>Do</th></tr></thead>
+                        <tbody>
+                            <tr><td class="sprint-end milestone" title="Fin Sprint 4: MVP Completo para Piloto">1</td><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td><td>7</td></tr>
+                            <tr><td>8</td><td>9</td><td>10</td><td>11</td><td>12</td><td>13</td><td>14</td></tr>
+                            <tr><td>15</td><td>16</td><td>17</td><td>18</td><td>19</td><td>20</td><td>21</td></tr>
+                            <tr><td>22</td><td>23</td><td>24</td><td>25</td><td>26</td><td>27</td><td>28</td></tr>
+                            <tr><td>29</td><td>30</td><td></td><td></td><td></td><td></td><td></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <script>
+        // Gantt Chart Data and Initialization
+        var tasks = [
+            { id: 'sprint0', name: 'Fase 0: Preparación', start: '2025-07-01', end: '2025-07-07', progress: 0, custom_class: 'sprint-card-0' },
+            { id: 'sprint1', name: 'Sprint 1: Usuarios y Acceso', start: '2025-07-08', end: '2025-07-21', progress: 0, dependencies: 'sprint0' },
+            { id: 'sprint2', name: 'Sprint 2: Conocimiento Estático', start: '2025-07-22', end: '2025-08-04', progress: 0, dependencies: 'sprint1' },
+            { id: 'sprint3', name: 'Sprint 3: El Cerebro (IA)', start: '2025-08-05', end: '2025-08-18', progress: 0, dependencies: 'sprint2' },
+            { id: 'sprint4', name: 'Sprint 4: Cierre del Círculo', start: '2025-08-19', end: '2025-09-01', progress: 0, dependencies: 'sprint3' },
+            { id: 'mvp_complete', name: '✅ MVP Completo', start: '2025-09-02', end: '2025-09-03', progress: 0, dependencies: 'sprint4' }
+        ];
+
+        var gantt = new Gantt("#gantt-chart", tasks, {
+            view_mode: 'Week',
+            language: 'es',
+            on_click: (task) => {
+                console.log(task);
+            },
+        });
+    </script>
+
+</body>
+</html>
