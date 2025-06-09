@@ -155,6 +155,29 @@
             0%, 100% { transform: scale(1); }
             50% { transform: scale(1.4); }
         }
+
+        /* Estilos para el botón de subir */
+        #scrollTopBtn {
+            display: none;
+            position: fixed;
+            bottom: 32px;
+            right: 32px;
+            z-index: 2000;
+            background: var(--primary-color);
+            color: #fff;
+            border: none;
+            border-radius: 50%;
+            width: 56px;
+            height: 56px;
+            font-size: 2em;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+            cursor: pointer;
+            transition: background 0.2s, transform 0.2s;
+        }
+        #scrollTopBtn:hover {
+            background: var(--secondary-color);
+            transform: scale(1.08);
+        }
     </style>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/frappe-gantt@0.6.1/dist/frappe-gantt.css">
     <script src="https://cdn.jsdelivr.net/npm/frappe-gantt@0.6.1/dist/frappe-gantt.min.js"></script>
@@ -351,6 +374,7 @@
         </section>
     </div>
 
+    <button id="scrollTopBtn" title="Subir al inicio">↑</button>
     <footer>
         Página desarrollada por Santiago Castellano Hernández © 2025 con mucho <span class="heart">♥</span>
     </footer>
@@ -374,6 +398,22 @@
                     element.scrollIntoView({ behavior: 'smooth' });
                 }
             },
+        });
+
+        // Botón flotante para subir al inicio
+        const scrollTopBtn = document.getElementById('scrollTopBtn');
+        window.addEventListener('scroll', function() {
+            // Mostrar el botón si la cabecera ya no es visible
+            const header = document.querySelector('header');
+            const headerBottom = header.getBoundingClientRect().bottom;
+            if (headerBottom < 0) {
+                scrollTopBtn.style.display = 'block';
+            } else {
+                scrollTopBtn.style.display = 'none';
+            }
+        });
+        scrollTopBtn.addEventListener('click', function() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         });
     </script>
 </body>
