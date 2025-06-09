@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Plan de Proyecto: Plataforma de Conocimiento con IA (v2)</title>
+    <title>Plan de Proyecto: Plataforma de Conocimiento con IA (v5 - Final Detallado)</title>
     <style>
         :root {
             --primary-color: #0052cc;
@@ -14,10 +14,9 @@
             --header-color: #172b4d;
             --border-color: #e0e0e0;
             --gantt-bar-color: #5aac44;
-            --gantt-progress-color: #61bd4f;
             --milestone-color: #ffc107;
         }
-
+        html { scroll-behavior: smooth; }
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
             margin: 0;
@@ -25,31 +24,19 @@
             color: var(--text-color);
             line-height: 1.6;
         }
-
         .container {
             max-width: 1200px;
             margin: 0 auto;
             padding: 20px;
         }
-
         header {
             background-color: var(--card-background);
             padding: 20px 40px;
             border-bottom: 1px solid var(--border-color);
             text-align: center;
         }
-
-        header h1 {
-            color: var(--header-color);
-            margin: 0;
-            font-size: 2.5em;
-        }
-        
-        header p {
-            font-size: 1.2em;
-            color: #5e6c84;
-        }
-
+        header h1 { color: var(--header-color); margin: 0; font-size: 2.5em; }
+        header p { font-size: 1.2em; color: #5e6c84; }
         nav {
             position: sticky;
             top: 0;
@@ -59,190 +46,144 @@
             border-bottom: 1px solid var(--border-color);
             display: flex;
             justify-content: center;
+            align-items: center;
             padding: 10px 0;
         }
-
-        nav a {
+        nav a.nav-link, .dropdown .nav-link {
             color: var(--primary-color);
             text-decoration: none;
             padding: 10px 20px;
             font-weight: 600;
             transition: color 0.3s, background-color 0.3s;
             border-radius: 8px;
+            display: block;
         }
-
-        nav a:hover {
+        nav a.nav-link:hover, .dropdown:hover .nav-link {
             color: var(--card-background);
             background-color: var(--secondary-color);
         }
-
+        .dropdown { position: relative; display: inline-block; }
+        .dropdown-content {
+            display: none; position: absolute; background-color: var(--card-background);
+            min-width: 220px; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1; border-radius: 8px; padding: 10px 0;
+        }
+        .dropdown-content a { color: var(--primary-color); padding: 12px 16px; text-decoration: none; display: block; text-align: left; }
+        .dropdown-content a:hover { background-color: #f1f1f1; }
+        .dropdown:hover .dropdown-content { display: block; }
+        
         section {
-            padding: 60px 20px;
-            margin-top: 20px;
-            background-color: var(--card-background);
-            border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-            scroll-margin-top: 80px; /* Offset for sticky nav */
+            padding: 60px 20px; margin-top: 20px; background-color: var(--card-background);
+            border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            scroll-margin-top: 80px;
         }
-        
         h2 {
-            color: var(--header-color);
-            border-bottom: 3px solid var(--primary-color);
-            padding-bottom: 10px;
-            margin-bottom: 30px;
-            font-size: 2em;
+            color: var(--header-color); border-bottom: 3px solid var(--primary-color);
+            padding-bottom: 10px; margin-bottom: 30px; font-size: 2em;
         }
+        h3 { color: var(--header-color); font-size: 1.5em; }
+        h4 { color: #172b4d; font-size: 1.2em; }
         
-        h3 {
-            color: var(--header-color);
-            font-size: 1.5em;
-        }
-
-        /* Dossier Styles */
-        #dossier .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
-        }
+        #dossier .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; }
         #dossier .grid-item {
-            background-color: var(--background-color);
-            padding: 20px;
-            border-radius: 8px;
-            border-left: 5px solid var(--secondary-color);
+            background-color: var(--background-color); padding: 20px;
+            border-radius: 8px; border-left: 5px solid var(--secondary-color);
         }
         
-        /* Gantt Styles */
-        .gantt-container {
-            width: 100%;
-            overflow-x: auto;
-        }
-        .gantt .bar-wrapper.active .bar {
-            opacity: 1;
-        }
-        .gantt .bar {
-            fill: var(--gantt-bar-color) !important;
-            opacity: 0.7;
-            transition: opacity 0.3s;
-        }
-        .gantt .bar-progress {
-            fill: var(--gantt-progress-color) !important;
-        }
-        .gantt .bar-label {
-            font-size: 14px !important;
-            font-weight: 500;
-            fill: #fff !important;
-        }
-        
-        /* Sprints View Styles */
-        .sprints-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 25px;
-        }
-        .sprint-card {
-            background-color: var(--background-color);
-            border-radius: 8px;
-            padding: 25px;
-            border-top: 5px solid;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-            transition: transform 0.3s, box-shadow 0.3s;
-        }
-        .sprint-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 6px 16px rgba(0,0,0,0.1);
-        }
-        .sprint-card h3 { margin-top: 0; }
-        .sprint-card h4 {
-            font-weight: 500;
-            color: #5e6c84;
-            margin-top: -10px;
-            margin-bottom: 20px;
-        }
-        .sprint-card ul {
-            padding-left: 20px;
-            list-style: none;
-        }
-        .sprint-card li {
-             position: relative;
-             padding-left: 25px;
-             margin-bottom: 8px;
-        }
-        .sprint-card li::before {
-            content: '✓';
-            position: absolute;
-            left: 0;
-            color: var(--primary-color);
-            font-weight: bold;
-        }
-        .sprint-card-0 { border-color: #ff991f; } /* Orange */
-        .sprint-card-1 { border-color: #00c7e5; } /* Cyan */
-        .sprint-card-2 { border-color: #5aac44; } /* Green */
-        .sprint-card-3 { border-color: #e54987; } /* Pink */
-        .sprint-card-4 { border-color: #795548; } /* Brown */
+        .gantt-container { width: 100%; overflow-x: auto; }
 
-        /* Calendar Styles */
-        .calendar-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 30px;
-            text-align: center;
+        .sprints-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 25px; }
+        .sprint-card {
+            background-color: var(--background-color); border-radius: 8px; padding: 25px;
+            border-top: 5px solid; box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            transition: transform 0.3s, box-shadow 0.3s; display: flex; flex-direction: column;
         }
-        .calendar-table {
-            width: 100%;
-            border-collapse: collapse;
+        .sprint-card:hover { transform: translateY(-5px); box-shadow: 0 6px 16px rgba(0,0,0,0.1); }
+        .sprint-card h3 { margin-top: 0; }
+        .sprint-card ul { padding-left: 20px; list-style-type: '✓ '; margin: 10px 0; flex-grow: 1; }
+        .sprint-card li { margin-bottom: 5px; }
+        .sprint-card .details-link {
+            display: block; margin-top: 15px; text-align: right;
+            font-weight: 600; color: var(--primary-color); text-decoration: none;
         }
-        .calendar-table th, .calendar-table td {
-            padding: 8px;
-            border: 1px solid #ddd;
-            width: 14.28%;
-        }
-        .calendar-table th {
-            background-color: #f2f2f2;
-        }
+        .sprint-card .details-link:hover { text-decoration: underline; }
+        .sprint-card-0 { border-color: #ff991f; } .sprint-card-1 { border-color: #00c7e5; }
+        .sprint-card-2 { border-color: #5aac44; } .sprint-card-3 { border-color: #e54987; }
+        .sprint-card-4 { border-color: #795548; }
+
+        .calendar-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 30px; text-align: center; }
+        .calendar-table { width: 100%; border-collapse: collapse; }
+        .calendar-table th, .calendar-table td { padding: 8px; border: 1px solid #ddd; width: 14.28%; }
+        .calendar-table th { background-color: #f2f2f2; }
         td.sprint-start { background-color: #a6f3a6; font-weight: bold; }
         td.sprint-end { background-color: #f3a6a6; font-weight: bold; }
         td.milestone { background-color: var(--milestone-color); font-weight: bold; }
-        .legend {
-            margin-top: 20px;
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            flex-wrap: wrap;
+        .legend { margin-top: 20px; display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; }
+        .legend-item { display: flex; align-items: center; gap: 8px; }
+        .legend-color { width: 20px; height: 20px; border-radius: 4px; }
+        
+        .sprint-detail-section { padding-bottom: 40px; border-bottom: 1px dashed var(--border-color); }
+        .sprint-detail-section:last-child { border-bottom: none; }
+        .task-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 20px; }
+        .task-card {
+            background: #fafdff; border: 1px solid var(--border-color);
+            border-left: 5px solid var(--secondary-color); padding: 20px; border-radius: 8px;
         }
-        .legend-item {
-            display: flex;
-            align-items: center;
-            gap: 8px;
+        .task-card h4 { margin-top: 0; }
+        .task-card ul { padding-left: 20px; font-size: 0.9em; }
+        .def-of-done {
+            background-color: #e6f7ff; border: 1px solid #91d5ff;
+            padding: 20px; border-radius: 8px; margin-top: 30px;
         }
-        .legend-color {
-            width: 20px;
-            height: 20px;
-            border-radius: 4px;
+        .def-of-done ul { list-style-type: '✅ '; padding-left: 30px; }
+
+        footer {
+            text-align: center;
+            padding: 30px 20px;
+            margin-top: 40px;
+            border-top: 1px solid var(--border-color);
+            background-color: var(--card-background);
+            color: #5e6c84;
+            font-size: 0.9em;
+        }
+        .heart {
+            color: #e25555;
+            display: inline-block;
+            animation: pulsate 1.5s ease-in-out infinite;
+        }
+        @keyframes pulsate {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.4); }
         }
     </style>
-    
-    <!-- Frappe Gantt Chart Library -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/frappe-gantt@0.6.1/dist/frappe-gantt.css">
     <script src="https://cdn.jsdelivr.net/npm/frappe-gantt@0.6.1/dist/frappe-gantt.min.js"></script>
-
 </head>
 <body>
-
     <header>
-        <h1>Plan de Proyecto v2</h1>
+        <h1>Plan de Proyecto v5 (Final Detallado)</h1>
         <p>Plataforma de Conocimiento con IA para Maresoft</p>
     </header>
 
     <nav>
-        <a href="#dossier">Dossier del Proyecto</a>
-        <a href="#gantt">Diagrama de Gantt</a>
-        <a href="#sprints">Vista de Sprints</a>
-        <a href="#calendario">Calendario de Hitos</a>
+        <a href="#dossier" class="nav-link">Dossier</a>
+        <a href="#gantt" class="nav-link">Gantt</a>
+        <a href="#sprints-visual" class="nav-link">Sprints</a>
+        <a href="#calendario" class="nav-link">Calendario</a>
+        <div class="dropdown">
+            <a href="#sprints-breakdown" class="nav-link">Desglose de Sprints ▾</a>
+            <div class="dropdown-content">
+                <a href="#sprint1-details">Sprint 1: Usuarios y Acceso</a>
+                <a href="#sprint2-details">Sprint 2: Conocimiento Estático</a>
+                <a href="#sprint3-details">Sprint 3: El Cerebro (IA)</a>
+                <a href="#sprint4-details">Sprint 4: Cierre del Círculo</a>
+            </div>
+        </div>
     </nav>
 
     <div class="container">
         <section id="dossier">
-            <h2>Dossier del Proyecto</h2>
+             <h2>Dossier del Proyecto</h2>
             <div class="grid">
                 <div class="grid-item">
                     <h3>Objetivo del MVP</h3>
@@ -269,72 +210,40 @@
                 </div>
             </div>
         </section>
-
         <section id="gantt">
             <h2>Diagrama de Gantt</h2>
-            <div class="gantt-container">
-                 <svg id="gantt-chart"></svg>
-            </div>
+            <div class="gantt-container"><svg id="gantt-chart"></svg></div>
         </section>
-
-        <section id="sprints">
+        <section id="sprints-visual">
             <h2>Vista Visual de Sprints</h2>
             <div class="sprints-container">
                 <div class="sprint-card sprint-card-0">
-                    <h3>Fase 0: Preparación</h3>
-                    <h4>1 Julio - 7 Julio, 2025</h4>
-                    <p><strong>Objetivo:</strong> Establecer las bases técnicas y de gestión.</p>
-                    <ul>
-                        <li>Configuración de Jira y Bitbucket.</li>
-                        <li>Setup del entorno de desarrollo (Laravel, Vue, PGSQL + pgvector).</li>
-                        <li>Definición del modelo de datos inicial.</li>
-                    </ul>
+                    <h3>Fase 0: Preparación</h3><h4>1 Jul - 7 Jul</h4>
+                    <ul><li>Entorno de desarrollo listo.</li><li>Repositorios y project board configurados.</li><li>Modelo de datos inicial definido.</li></ul>
+                    <a href="#sprint1-details" class="details-link">Más detalle →</a>
                 </div>
                 <div class="sprint-card sprint-card-1">
-                    <h3>Sprint 1: Usuarios y Acceso</h3>
-                    <h4>8 Julio - 21 Julio, 2025</h4>
-                    <p><strong>Objetivo:</strong> Sistema de acceso seguro y panel de administración.</p>
-                    <ul>
-                        <li>Flujo de solicitud de alta con aprobación.</li>
-                        <li>Login con Google (Socialite).</li>
-                        <li>Sistema de Roles y Permisos (Admin vs. Usuario).</li>
-                    </ul>
+                    <h3>Sprint 1: Usuarios y Acceso</h3><h4>8 Jul - 21 Jul</h4>
+                    <ul><li>Flujo de aprobación de usuarios.</li><li>Login con Google.</li><li>Roles y permisos básicos (Admin/User).</li></ul>
+                    <a href="#sprint1-details" class="details-link">Más detalle →</a>
                 </div>
                 <div class="sprint-card sprint-card-2">
-                    <h3>Sprint 2: Conocimiento Estático</h3>
-                    <h4>22 Julio - 4 Agosto, 2025</h4>
-                    <p><strong>Objetivo:</strong> Repositorio de conocimiento "oficial" (Docs y FAQs).</p>
-                    <ul>
-                        <li>CRUD para Artículos y Categorías.</li>
-                        <li>CRUD para FAQs.</li>
-                        <li>Vistas públicas para consulta y búsqueda simple.</li>
-                    </ul>
+                    <h3>Sprint 2: Conocimiento Estático</h3><h4>22 Jul - 4 Ago</h4>
+                     <ul><li>Gestión de artículos y categorías.</li><li>Consulta de documentación.</li><li>Búsqueda simple de contenido.</li></ul>
+                    <a href="#sprint2-details" class="details-link">Más detalle →</a>
                 </div>
                 <div class="sprint-card sprint-card-3">
-                    <h3>Sprint 3: El Cerebro (IA)</h3>
-                    <h4>5 Agosto - 18 Agosto, 2025</h4>
-                    <p><strong>Objetivo:</strong> Implementación del chatbot y el sistema RAG.</p>
-                    <ul>
-                        <li>Ingesta de documentos y generación de embeddings.</li>
-                        <li>Interfaz de chat en Vue.js.</li>
-                        <li>Endpoint API para el flujo RAG.</li>
-                        <li>Registro de conversaciones en BBDD.</li>
-                    </ul>
+                    <h3>Sprint 3: El Cerebro (IA)</h3><h4>5 Ago - 18 Ago</h4>
+                    <ul><li>Ingesta de documentos y vectorización.</li><li>Interfaz de chat funcional.</li><li>Sistema RAG operativo.</li></ul>
+                    <a href="#sprint3-details" class="details-link">Más detalle →</a>
                 </div>
                 <div class="sprint-card sprint-card-4">
-                    <h3>Sprint 4: Cierre del Círculo</h3>
-                    <h4>19 Agosto - 1 Septiembre, 2025</h4>
-                    <p><strong>Objetivo:</strong> Conectar la IA con la gestión y preparar el lanzamiento.</p>
-                    <ul>
-                        <li>Panel de auditoría de chats.</li>
-                        <li>Función "Promocionar a FAQ".</li>
-                        <li>Refinamiento de UI/UX y revisión de seguridad.</li>
-                        <li>Despliegue para piloto interno.</li>
-                    </ul>
+                    <h3>Sprint 4: Cierre del Círculo</h3><h4>19 Ago - 1 Sep</h4>
+                    <ul><li>Auditoría de conversaciones de IA.</li><li>Función "Promocionar a FAQ".</li><li>UI/UX pulida y lista para piloto.</li></ul>
+                    <a href="#sprint4-details" class="details-link">Más detalle →</a>
                 </div>
             </div>
         </section>
-
         <section id="calendario">
             <h2>Calendario de Hitos (2025)</h2>
             <div class="legend">
@@ -346,7 +255,7 @@
                 <div>
                     <h3>Julio 2025</h3>
                     <table class="calendar-table">
-                        <thead><tr><th>Lu</th><th>Ma</th><th>Mi</th><th>Ju</th><th>Vi</th><th>Sá</th><th>Do</th></tr></thead>
+                         <thead><tr><th>Lu</th><th>Ma</th><th>Mi</th><th>Ju</th><th>Vi</th><th>Sá</th><th>Do</th></tr></thead>
                         <tbody>
                             <tr><td></td><td class="sprint-start" title="Inicio Fase 0">1</td><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td></tr>
                             <tr><td class="sprint-end" title="Fin Fase 0">7</td><td class="sprint-start" title="Inicio Sprint 1">8</td><td>9</td><td>10</td><td>11</td><td>12</td><td>13</td></tr>
@@ -385,27 +294,87 @@
             </div>
         </section>
 
+        <section id="sprints-breakdown">
+            <h2>Desglose Detallado de Sprints</h2>
+            <div id="sprint1-details" class="sprint-detail-section">
+                <h3>Sprint 1: Usuarios y Acceso</h3>
+                <p><strong>Duración:</strong> 8 Julio - 21 Julio, 2025<br>
+                <strong>Objetivo:</strong> Al final de este sprint, un usuario podrá solicitar acceso, un administrador podrá aprobarlo, y el usuario aprobado podrá iniciar sesión de forma segura con su cuenta de Google.</p>
+                <h4>Sprint Backlog</h4>
+                <div class="task-grid">
+                    <div class="task-card"><h4>US-01: Formulario de Solicitud</h4><p><strong>Como</strong> visitante, <strong>quiero</strong> un formulario para solicitar acceso, <strong>para</strong> que un admin me apruebe.</p><ul><li>Backend: Ruta y controlador para guardar la solicitud.</li><li>Frontend: Vista en Vue.js con el formulario.</li><li>DB: Modelo y migración para `access_requests`.</li></ul></div>
+                    <div class="task-card"><h4>US-02 & US-03: Panel de Aprobación</h4><p><strong>Como</strong> Admin, <strong>quiero</strong> un panel para ver y gestionar solicitudes, <strong>para</strong> centralizar el control de acceso.</p><ul><li>Backend: Ruta y controlador para listar y procesar solicitudes (aprobar/rechazar).</li><li>Lógica de aprobación: Crea un `User` y le asigna el rol 'user'.</li><li>Frontend: Vista de tabla para administradores.</li></ul></div>
+                    <div class="task-card"><h4>US-04: Login con Google</h4><p><strong>Como</strong> usuario aprobado, <strong>quiero</strong> iniciar sesión con Google, <strong>para</strong> un acceso fácil y seguro.</p><ul><li>Instalar y configurar Laravel Socialite.</li><li>Crear rutas y controlador para el callback de OAuth2.</li><li>Validar que el email del usuario de Google exista en la tabla `users`.</li></ul></div>
+                     <div class="task-card"><h4>US-05: Roles y Permisos</h4><p><strong>Como</strong> Admin, <strong>quiero</strong> tener permisos especiales, <strong>para</strong> acceder a secciones restringidas.</p><ul><li>Instalar y configurar `spatie/laravel-permission`.</li><li>Crear roles 'admin' y 'user'.</li><li>Proteger rutas `/admin/*` con el middleware de roles.</li></ul></div>
+                </div>
+                <div class="def-of-done"><h4>Definición de "Hecho"</h4><ul><li>El flujo completo de solicitud-aprobación-login funciona.</li><li>Un usuario normal no puede acceder a las rutas de administrador.</li><li>El código está en la rama `develop` y se ha realizado una demo funcional.</li></ul></div>
+            </div>
+            <div id="sprint2-details" class="sprint-detail-section">
+                <h3>Sprint 2: Conocimiento Estático</h3>
+                <p><strong>Duración:</strong> 22 Julio - 4 Agosto, 2025<br>
+                <strong>Objetivo:</strong> Crear un repositorio de conocimiento "oficial" (documentación y FAQs) que los administradores puedan gestionar y los usuarios puedan consultar, incluyendo una función de búsqueda simple.</p>
+                <h4>Sprint Backlog</h4>
+                <div class="task-grid">
+                    <div class="task-card"><h4>US-06: Gestión de Artículos</h4><p><strong>Como</strong> Admin, <strong>quiero</strong> un CRUD completo para artículos de documentación, <strong>para</strong> poder crear y mantener el contenido oficial.</p><ul><li>Backend: `ArticleController` con métodos `index, create, store, edit, update, destroy`.</li><li>Frontend: Vistas para el listado y formulario de creación/edición con un editor de texto enriquecido (ej. TinyMCE).</li><li>DB: Modelo y migración para `articles`.</li></ul></div>
+                    <div class="task-card"><h4>US-07: Gestión de Categorías</h4><p><strong>Como</strong> Admin, <strong>quiero</strong> organizar artículos por categorías, <strong>para</strong> que la navegación sea más intuitiva.</p><ul><li>Backend: CRUD para `Categories`.</li><li>DB: Modelo `Category` y relación `Article belongsTo Category`.</li><li>Frontend: Añadir selector de categoría en el formulario de artículos.</li></ul></div>
+                    <div class="task-card"><h4>US-08: Consulta de Documentación</h4><p><strong>Como</strong> Usuario, <strong>quiero</strong> navegar y leer la documentación, <strong>para</strong> encontrar soluciones a mis problemas.</p><ul><li>Frontend: Vista pública que liste categorías y artículos.</li><li>Frontend: Vista de detalle para leer un artículo completo.</li></ul></div>
+                     <div class="task-card"><h4>US-09: Búsqueda Simple</h4><p><strong>Como</strong> Usuario, <strong>quiero</strong> un buscador simple, <strong>para</strong> encontrar rápidamente la información que necesito.</p><ul><li>Backend: Modificar el método `index` del controlador para que acepte un parámetro de búsqueda.</li><li>Lógica de búsqueda: `WHERE title LIKE '%query%' OR content LIKE '%query%'`.</li><li>Frontend: Añadir una barra de búsqueda en la vista de documentación.</li></ul></div>
+                </div>
+                <div class="def-of-done"><h4>Definición de "Hecho"</h4><ul><li>Un administrador puede crear, editar y borrar artículos y categorías.</li><li>Un usuario logeado puede navegar por la documentación por categorías.</li><li>La función de búsqueda devuelve resultados relevantes de los títulos y contenido.</li></ul></div>
+            </div>
+            <div id="sprint3-details" class="sprint-detail-section">
+                <h3>Sprint 3: El Cerebro (IA)</h3>
+                <p><strong>Duración:</strong> 5 Agosto - 18 Agosto, 2025<br>
+                <strong>Objetivo:</strong> Implementar el chatbot funcional con su sistema RAG. Los usuarios podrán hacer preguntas y recibir respuestas basadas en la documentación subida por los administradores.</p>
+                <h4>Sprint Backlog</h4>
+                <div class="task-grid">
+                    <div class="task-card"><h4>US-10: Ingesta de Documentos</h4><p><strong>Como</strong> Admin, <strong>quiero</strong> subir documentos (PDF, MD), <strong>para</strong> que la IA los use como fuente de conocimiento.</p><ul><li>Backend: Panel de administración para subir archivos.</li><li>Lógica: Crear un Job en cola de Laravel para procesar los documentos en segundo plano.</li><li>Job: Extraer texto, fragmentar (chunking), llamar a la API de Gemini para embeddings y guardar en `pgvector`.</li></ul></div>
+                    <div class="task-card"><h4>US-11: Interfaz de Chat</h4><p><strong>Como</strong> Usuario, <strong>quiero</strong> una interfaz de chat, <strong>para</strong> poder interactuar con el asistente de IA.</p><ul><li>Frontend: Crear el componente de chat en Vue.js (input, área de mensajes, indicador de "escribiendo...").</li><li>Manejar el estado de la conversación en el frontend.</li></ul></div>
+                    <div class="task-card"><h4>US-12: Flujo RAG</h4><p><strong>Como</strong> desarrollador, <strong>quiero</strong> implementar el endpoint de la API del chat, <strong>para</strong> conectar el frontend con la lógica de IA.</p><ul><li>Backend: Crear la ruta `/api/chat`.</li><li>Controlador: Implementar el flujo RAG completo (vectorizar pregunta -> buscar en `pgvector` -> construir prompt -> llamar a Gemini).</li></ul></div>
+                     <div class="task-card"><h4>US-13: Auditoría de Chats</h4><p><strong>Como</strong> Admin, <strong>quiero</strong> que se registren todas las conversaciones, <strong>para</strong> poder revisarlas posteriormente.</p><ul><li>DB: Modelo y migración para `chat_logs` (user_id, pregunta, respuesta_ia, contexto_usado, timestamp).</li><li>Backend: En el endpoint del chat, guardar cada interacción en la tabla `chat_logs`.</li></ul></div>
+                </div>
+                <div class="def-of-done"><h4>Definición de "Hecho"</h4><ul><li>Un administrador puede subir un PDF y este se procesa correctamente.</li><li>Un usuario puede hacer una pregunta en el chat sobre el contenido del PDF y recibe una respuesta coherente.</li><li>La conversación completa se almacena correctamente en la base de datos.</li></ul></div>
+            </div>
+            <div id="sprint4-details" class="sprint-detail-section">
+                <h3>Sprint 4: Cierre del Círculo</h3>
+                <p><strong>Duración:</strong> 19 Agosto - 1 Septiembre, 2025<br>
+                <strong>Objetivo:</strong> Conectar la inteligencia del chat con la gestión de contenido, pulir la experiencia de usuario y preparar la plataforma para el lanzamiento piloto.</p>
+                <h4>Sprint Backlog</h4>
+                <div class="task-grid">
+                    <div class="task-card"><h4>US-14: Panel de Revisión de Chats</h4><p><strong>Como</strong> Admin, <strong>quiero</strong> un panel para ver los logs de chat, <strong>para</strong> entender qué preguntan los usuarios.</p><ul><li>Backend: Controlador para mostrar los `chat_logs` con paginación y filtros (por usuario, por fecha).</li><li>Frontend: Vista de tabla en el panel de administración para mostrar los logs.</li></ul></div>
+                    <div class="task-card"><h4>US-15: Promocionar a FAQ</h4><p><strong>Como</strong> Admin, <strong>quiero</strong> crear una FAQ a partir de un chat útil con un solo clic, <strong>para</strong> mejorar rápidamente la base de conocimiento.</p><ul><li>Frontend: Añadir un botón "Promocionar a FAQ" en la vista de logs.</li><li>Backend: Crear una ruta que tome el ID de un log y redirija al formulario de creación de FAQ, pre-rellenando la pregunta y la respuesta.</li></ul></div>
+                    <div class="task-card"><h4>NFR-01: Refinamiento de UI/UX</h4><p><strong>Como</strong> Usuario, <strong>quiero</strong> una interfaz pulida y fácil de usar en todos los dispositivos, <strong>para</strong> tener una buena experiencia.</p><ul><li>Revisión de CSS, consistencia de componentes.</li><li>Pruebas de responsividad en móvil y tablet.</li><li>Añadir micro-interacciones (loaders, notificaciones).</li></ul></div>
+                     <div class="task-card"><h4>NFR-02: Preparación para Despliegue</h4><p><strong>Como</strong> desarrollador, <strong>quiero</strong> preparar la aplicación para producción, <strong>para</strong> asegurar un lanzamiento estable y seguro.</p><ul><li>Revisión final de seguridad (Policies, validación, XSS).</li><li>Escribir tests para las funcionalidades críticas.</li><li>Configurar el entorno de producción y el proceso de despliegue (CI/CD).</li></ul></div>
+                </div>
+                <div class="def-of-done"><h4>Definición de "Hecho"</h4><ul><li>El panel de logs de chat es funcional y se puede promocionar una conversación a FAQ.</li><li>La interfaz se ve y se siente profesional en los principales dispositivos.</li><li>La aplicación está desplegada en un entorno de staging/piloto y lista para ser probada por usuarios reales.</li></ul></div>
+            </div>
+        </section>
     </div>
 
+    <footer>
+        Página desarrollada por Santiago Castellano Hernández © 2025 con mucho <span class="heart">♥</span>
+    </footer>
+
     <script>
-        // Gantt Chart Data and Initialization
         var tasks = [
-            { id: 'sprint0', name: 'Fase 0: Preparación', start: '2025-07-01', end: '2025-07-07', progress: 0, custom_class: 'sprint-card-0' },
+            { id: 'sprint0', name: 'Fase 0: Preparación', start: '2025-07-01', end: '2025-07-07', progress: 0 },
             { id: 'sprint1', name: 'Sprint 1: Usuarios y Acceso', start: '2025-07-08', end: '2025-07-21', progress: 0, dependencies: 'sprint0' },
             { id: 'sprint2', name: 'Sprint 2: Conocimiento Estático', start: '2025-07-22', end: '2025-08-04', progress: 0, dependencies: 'sprint1' },
             { id: 'sprint3', name: 'Sprint 3: El Cerebro (IA)', start: '2025-08-05', end: '2025-08-18', progress: 0, dependencies: 'sprint2' },
             { id: 'sprint4', name: 'Sprint 4: Cierre del Círculo', start: '2025-08-19', end: '2025-09-01', progress: 0, dependencies: 'sprint3' },
             { id: 'mvp_complete', name: '✅ MVP Completo', start: '2025-09-02', end: '2025-09-03', progress: 0, dependencies: 'sprint4' }
         ];
-
         var gantt = new Gantt("#gantt-chart", tasks, {
             view_mode: 'Week',
             language: 'es',
-            on_click: (task) => {
-                console.log(task);
+            on_click: (task) => { 
+                const sectionId = task.id.includes('sprint') ? task.id.replace('sprint', 'sprint') + '-details' : 'sprints-breakdown';
+                const element = document.getElementById(sectionId);
+                if (element) {
+                    element.scrollIntoView({ behavior: 'smooth' });
+                }
             },
         });
     </script>
-
 </body>
 </html>
